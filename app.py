@@ -45,6 +45,7 @@ from modules.ui_components import (
     render_header,
     render_how_it_works,
     render_existing_modules_banner,
+    render_department_file_guide,
     render_footer
 )
 
@@ -67,12 +68,8 @@ def main():
     # =========================================================================
     st.markdown('<div class="step-header"><h3>📁 Step 1: Upload Department File</h3></div>', unsafe_allow_html=True)
     
-    st.markdown("""
-    Upload your department file containing the student list. This file **must have an `Index` column**.
-    Other columns like `Name`, `Email`, `Firstname`, `Lastname` are optional but recommended.
-    
-    **If you previously exported a file with grades**, upload that to continue building on it!
-    """)
+    # Show guide about what the department file should contain
+    render_department_file_guide()
     
     dept_file = st.file_uploader(
         "Choose Department File (CSV or Excel)",

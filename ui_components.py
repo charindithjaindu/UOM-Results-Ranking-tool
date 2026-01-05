@@ -15,7 +15,6 @@ def render_header():
         layout="wide"
     )
     
-    # Custom CSS for better UX - supports both light and dark mode
     st.markdown("""
     <style>
         /* Main header - works in both modes */
@@ -130,100 +129,33 @@ def render_how_it_works():
         
         This tool is designed to **build your result sheet progressively**. Here's what you need to know:
         
-        #### 1. 📁 Department File - **ONLY NEEDS STUDENT INFO!** (Excel or CSV)
+        1. **📁 Department File** - Upload this ONCE. It contains your student list with Index numbers.
         
+        2. **📄 Result PDFs** - Add them ONE BY ONE. Each PDF you add will:
+           - ✅ **Automatically detect** the module code from the PDF
+           - ✅ **Append the grades** as a new column to your existing data
+           - ✅ **Preserve all previously added** module grades
+        
+        3. **⚖️ Weights** - You must set credit weights for:
+           - New modules you're adding
+           - **AND all previously added modules** (if any exist)
+        
+        ---
+        
+        ### 📝 Example Workflow:
+        
+        | Step | Action | Result |
+        |------|--------|--------|
+        | 1 | Upload `Batch23_CSE.xlsx` | Student list loaded (Index, Name, Email) |
+        | 2 | Add `CS1040_Results.pdf` with weight 3 | Now has: Index, Name, Email, **CS1040_Grade** |
+        | 3 | Add `MA1024_Results.pdf` with weight 3 | Now has: Index, Name, Email, CS1040_Grade, **MA1024_Grade** |
+        | 4 | Generate Ranking | SGPA calculated, Rank assigned! |
+        
+        ---
+        
+        ⚠️ **Important**: Each time you use this tool in a new session, upload your **most recent department file** 
+        (the one that already has previous module grades) to continue building on it!
         """)
-        
-        st.info("""
-        **Important**: Your department file should ONLY contain student information:
-        - ✅ **Required**: `Index` column (e.g., 230001A, 230002B) // no need in order
-        - ✅ Optional: `Name`, `Email`, `Firstname`, `Lastname` (helpful for identification)
-        
-        **❌ DO NOT manually add module codes or grades** - the tool does this automatically!
-        """)
-        
-        st.markdown("""
-        **Example of a valid department file:**
-        
-        | Index   | Name           | Email                  |
-        |---------|----------------|------------------------|
-        | 230001A | John Doe       | john@uom.lk             |
-        | 230002B | Jane Smith     | jane@uom.lk             |
-        | 230003C | Bob Johnson    | bob@uom.lk              |
-        
-        👆 **That's it!** Just student info, no module columns needed.
-        
-        ---
-        
-        #### 2. 📄 Result PDFs - **AUTOMATICALLY PROCESSED**
-        
-        Upload result PDFs one by one. For each PDF, the tool will:
-        - ✅ **Automatically detect** the module code (e.g., CS2043, MA1024)
-        - ✅ **Extract all grades** from the PDF
-        - ✅ **Append as a new column** to your data (e.g., CS2043_Grade)
-        - ✅ **Preserve all previously added** module grades
-        
-        ---
-        
-        #### 3. ⚖️ Weights - **YOU JUST SET CREDIT VALUES**
-        
-        You must set credit weights for:
-        - New modules you're adding (when uploading PDF)
-        - AND all previously added modules (if continuing from an exported file)
-        
-        ---
-        
-        ### 📝 Complete Example Workflow:
-        
-        | Step | What You Do | What Happens |
-        |------|-------------|--------------|
-        | 1 | Upload `students.xlsx` with Index, Name, Email | ✅ Student list loaded |
-        | 2 | Upload `CS2043_Results.pdf` + set weight = 3 | ✅ Tool adds `CS2043_Grade` column automatically |
-        | 3 | Upload `MA1024_Results.pdf` + set weight = 3 | ✅ Tool adds `MA1024_Grade` column automatically |
-        | 4 | Click "Generate Rankings" | ✅ SGPA calculated, rankings ready! |
-        | 5 | Download the results | ✅ Get complete file with all grades + SGPA + Rank |
-        
-        ---
-        
-        ### 💾 Continuing Your Work Later
-        
-        If you download results and want to add more modules later:
-        1. Upload the **previously downloaded file** (which now has module columns)
-        2. The tool will detect existing modules automatically
-        3. Continue adding new PDFs!
-        
-        ---
-        
-        ### ⚠️ Common Mistake to Avoid
-        
-        ❌ **DON'T** manually add columns like `CS2043_Grade` to your department file  
-        ✅ **DO** just upload your simple student list and let the tool add grades from PDFs
-        """)
-
-
-def render_department_file_guide():
-    """Show a guide about department file requirements."""
-    st.markdown("""
-    <div class="info-box">
-        <h4>📋 What Should Your Department File Contain?</h4>
-        <p><strong>Required:</strong></p>
-        <ul>
-            <li>✅ <code>Index</code> column with student index numbers (e.g., 230001A, 230002B)</li>
-        </ul>
-        <p><strong>Optional (but recommended):</strong></p>
-        <ul>
-            <li>✅ <code>Name</code>, <code>Firstname</code>, <code>Lastname</code> - for easier identification</li>
-            <li>✅ <code>Email</code>, <code>Phone</code> - any other student info you want to keep</li>
-        </ul>
-        <p><strong>❌ DO NOT include:</strong></p>
-        <ul>
-            <li>❌ Module code columns (CS2043, MA1024, etc.)</li>
-            <li>❌ Grade columns (CS2043_Grade, etc.)</li>
-            <li>❌ SGPA or Rank columns</li>
-        </ul>
-        <p>🤖 <strong>The tool will automatically add module grades when you upload PDFs!</strong></p>
-    </div>
-    """, unsafe_allow_html=True)
 
 
 def render_existing_modules_banner(modules: List[str], weights: Dict[str, float]) -> Dict[str, float]:
